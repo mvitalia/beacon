@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no
 		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
-	<title>Cordova Basic</title>
+	<title>Eddystone Scan</title>
 
 	<style>
 		@import 'ui/css/evothings-app.css';
@@ -22,11 +22,12 @@
 	<script src="libs/jquery/jquery.js"></script>
 	<script src="libs/evothings/evothings.js"></script>
 	<script src="libs/evothings/ui/ui.js"></script>
-	<script src="app.js"></script>
+	<script src="libs/evothings/eddystone/eddystone.js"></script>
+	<script src="beacon.js"></script>
 
 </head>
 
-<body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
+<body>
 
 	<header>
 		<button class="back" onclick="history.back()">
@@ -38,25 +39,9 @@
 		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
 	</header>
 
-	<h1>Basic Cordova</h1>
-
-	<p>This app demonstrates basic Cordova functionality. For the app to work,
-		you need to run it in the Evothings Client App, or build a native
-		Cordova app yourself.</p>
-
-	<button class="blue" onclick="messagebox('Hello Evothings!')">
-		NATIVE DIALOG
-	</button>
-
-	<button class="yellow" onclick="navigator.notification.vibrate(1000)">
-		VIBRATE
-	</button>
-
-	<h2 class="panel-title">Compass</h2>
-
-	<p id="compass-heading">Status: Waiting for compass.</p>
-
-	<p id="compass-direction"></p>
+	<h1>Eddystone Scan</h1>
+	<p id="message">Please move within range of Eddystone beacons.</p>
+	<ul id="found-beacons" class="dynamic"></ul>
 
 </body>
 
