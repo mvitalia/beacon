@@ -36,8 +36,7 @@ var app = (function()
 				// Insert/update beacon table entry.
 				beacon.timeStamp = Date.now();
 				beacons[beacon.address] = beacon;
-				alert(beacon.address);
-				alert(beacon.url);
+				alert(beacon.uuid);
 				
 			},
 			function(error)
