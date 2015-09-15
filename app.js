@@ -10,7 +10,7 @@ var app = (function()
 	var updateTimer = null;
 
 	app.initialize = function()
-	{	
+	{
 		document.addEventListener(
 			'deviceready',
 			function() { evothings.scriptsLoaded(onDeviceReady) },
@@ -18,7 +18,7 @@ var app = (function()
 	};
 
 	function onDeviceReady()
-	{	
+	{
 		// Start tracking beacons!
 		setTimeout(startScan, 500);
 
@@ -28,7 +28,6 @@ var app = (function()
 
 	function startScan()
 	{
-		
 		// Called continuously when ranging beacons.
 		evothings.ble.startScan(
 			function(beacon)
@@ -36,16 +35,6 @@ var app = (function()
 				// Insert/update beacon table entry.
 				beacon.timeStamp = Date.now();
 				beacons[beacon.address] = beacon;
-				
-				evothing.ble.connect(beacon.address,function(info){/*evothing.ble.services(info.deviceHandle, function(services){
-					alert(services.uuid);
-					},function (errorCode){alert(errorCode);});*/
-					alert(info.deviceHandle);
-					},function(err){alert(err)});
-				
-				
-				
-				
 			},
 			function(error)
 			{
