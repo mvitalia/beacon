@@ -38,7 +38,7 @@ app.startScan = function(callbackFun)
 {
 	app.stopScan();
 
-	evothings.ble.startScan(
+	evothings.eddystone.startScan(
 		function(device)
 		{
 			// Report success. Sometimes an RSSI of +127 is reported.
@@ -59,7 +59,7 @@ app.startScan = function(callbackFun)
 // Stop scanning for devices.
 app.stopScan = function()
 {
-	evothings.ble.stopScan();
+	evothings.eddystone.stopScan();
 };
 
 // Called when Start Scan button is selected.
