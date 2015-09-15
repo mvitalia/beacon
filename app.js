@@ -1,71 +1,143 @@
-// JavaScript code for the Cordova Basic example app.
+// JavaScript code for the BLE Scan example app.
 
-document.addEventListener(
-	'deviceready',
-	function() { evothings.scriptsLoaded(onDeviceReady) },
-	false);
+// Application object.
+var app = {};
 
-function onDeviceReady()
+// Device list.
+app.devices = {};
+
+// UI methods.
+app.ui = {};
+
+// Timer that updates the device list and removes inactive
+// devices in case no devices are found by scan.
+app.ui.updateTimer = null;
+
+app.initialize = function()
 {
-	// Start watching/monitoring device sensors
-	startWatch();
-}
+	document.addEventListener(
+		'deviceready',
+		function() { evothings.scriptsLoaded(app.onDeviceReady) },
+		false);
+};
 
-function messagebox(message)
+app.onDeviceReady = function()
 {
-	// Show a native alert box
-	navigator.notification.alert(message, function() {});
-}
+	// Not used.
+	// Here you can update the UI to say that
+	// the device (the phone/tablet) is ready
+	// to use BLE and other Cordova functions.
+};
 
-function startWatch()
+// Start the scan. Call the callback function when a device is found.
+// Format:
+//   callbackFun(deviceInfo, errorCode)
+//   deviceInfo: address, rssi, name
+//   errorCode: String
+app.startScan = function(callbackFun)
 {
-	navigator.compass.watchHeading(
-		onCompassSuccess,
-		onCompassError,
-		{ frequency: 500 });
-}
+	app.stopScan();
 
-/** Called by Cordova native when compass heading data is available */
-function onCompassSuccess(heading)
-{
-	showCompassHeading(
-		'Compass heading: ' +
-		Math.round(heading.magneticHeading));
-	showCompassDirection(
-		computeCompassDirection(
-			Math.round(heading.magneticHeading)));
-}
+	evothings.ble.startScan(
+		function(device)
+		{
+			// Report success. Sometimes an RSSI of +127 is reported.
+			// We filter out these values here.
+			if (device.rssi <= 0)
+			{
+				callbackFun(device, null);
+			}
+		},
+		function(errorCode)
+		{
+			// Report error.
+			callbackFun(null, errorCode);
+		}
+	);
+};
 
-/** Translates the approximate compass heading to a text */
-function computeCompassDirection(heading)
+// Stop scanning for devices.
+app.stopScan = function()
 {
-	var offset = 45 / 2;
-	if (heading < offset) return 'Facing North';
-	if (heading < offset + 45) return 'Facing North-East';
-	if (heading < offset + 90) return 'Facing East';
-	if (heading < offset + 135) return 'Facing South-East';
-	if (heading < offset + 180) return 'Facing South';
-	if (heading < offset + 225) return 'Facing South-West';
-	if (heading < offset + 270) return 'Facing West';
-	if (heading < offset + 315) return 'Facing North-West';
-	return 'Facing North';
-}
+	evothings.ble.stopScan();
+};
 
-function onCompassError(compassError)
+// Called when Start Scan button is selected.
+app.ui.onStartScanButton = function()
 {
-	showCompassHeading(
-		'Compass Error: ' +
-		compassError.code);
-}
+	app.startScan(app.ui.deviceFound);
+	app.ui.displayStatus('Scanning...');
+	app.ui.updateTimer = setInterval(app.ui.displayDeviceList, 500);
+};
 
-function showCompassHeading(data)
+// Called when Stop Scan button is selected.
+app.ui.onStopScanButton = function()
 {
-	// Changes the contents of the HTML-element with id 'compass-heading'
-	document.getElementById('compass-heading').innerHTML = data;
-}
+	app.stopScan();
+	app.devices = {};
+	app.ui.displayStatus('Scan Paused');
+	app.ui.displayDeviceList();
+	clearInterval(app.ui.updateTimer);
+};
 
-function showCompassDirection(data)
+// Called when a device is found.
+app.ui.deviceFound = function(device, errorCode)
 {
-	// Changes the contents of the HTML-element with id 'compass-direction'
-	document.getElementById('compass-direction').innerHTML = data;
-}
+	if (device)
+	{
+		// Set timestamp for device (this is used to remove
+		// inactive devices).
+		device.timeStamp = Date.now();
+
+		// Insert the device into table of found devices.
+		app.devices[device.address] = device;
+	}
+	else if (errorCode)
+	{
+		app.ui.displayStatus('Scan Error: ' + errorCode);
+	}
+};
+
+// Display the device list.
+app.ui.displayDeviceList = function()
+{
+	// Clear device list.
+	$('#found-devices').empty();
+
+	var timeNow = Date.now();
+
+	$.each(app.devices, function(key, device)
+	{
+		// Only show devices that are updated during the last 10 seconds.
+		if (device.timeStamp + 10000 > timeNow)
+		{
+			// Map the RSSI value to a width in percent for the indicator.
+			var rssiWidth = 100; // Used when RSSI is zero or greater.
+			if (device.rssi < -100) { rssiWidth = 0; }
+			else if (device.rssi < 0) { rssiWidth = 100 + device.rssi; }
+
+			// Create tag for device data.
+			var element = $(
+				'<li>'
+				+	'<strong>' + device.name + '</strong><br />'
+				// Do not show address on iOS since it can be confused
+				// with an iBeacon UUID.
+				+	(evothings.os.isIOS() ? '' : device.address + '<br />')
+				+	device.rssi + '<br />'
+				+ 	'<div style="background:rgb(225,0,0);height:20px;width:'
+				+ 		rssiWidth + '%;"></div>'
+				+ '</li>'
+			);
+
+			$('#found-devices').append(element);
+		}
+	});
+};
+
+// Display a status message
+app.ui.displayStatus = function(message)
+{
+	$('#scan-status').html(message);
+};
+
+app.initialize();
