@@ -37,14 +37,8 @@ var app = (function()
 				beacon.timeStamp = Date.now();
 				beacons[beacon.address] = beacon;
 				
-				evothing.ble.connect(beacon.address,function(info){
-					evothing.ble.services(info.deviceHandle, function(services){
-					alert(services.uuid);
-						
-					},function (errorCode){
-						alert(errorCode);
-					});
-				})
+				evothing.ble.connect(beacon.address,function(info){evothing.ble.services(info.deviceHandle, function(services){alert(services.uuid);},function (errorCode){alert(errorCode);});
+					},function(err){alert(err)});
 				
 				
 				
