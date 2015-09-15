@@ -30,12 +30,13 @@ var app = (function()
 	{
 		
 		// Called continuously when ranging beacons.
-		evothings.eddystone.startScan(
+		evothings.ble.startScan(
 			function(beacon)
 			{
 				// Insert/update beacon table entry.
 				beacon.timeStamp = Date.now();
 				beacons[beacon.address] = beacon;
+				alert(beacon.address);
 				
 			},
 			function(error)
