@@ -36,7 +36,17 @@ var app = (function()
 				// Insert/update beacon table entry.
 				beacon.timeStamp = Date.now();
 				beacons[beacon.address] = beacon;
-				alert(beacon.nid + "--------"+beacon.id);
+				
+				evothing.ble.connect(beacon.address,function(info){
+					evothing.ble.services(info.deviceHandle, function(services){
+					alert(services.uuid);
+						
+					},function (errorCode){
+						alert(errorCode);
+					});
+				})
+				
+				
 				
 				
 			},
