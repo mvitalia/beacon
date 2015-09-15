@@ -30,7 +30,7 @@ var app = (function()
 	{
 		
 		// Called continuously when ranging beacons.
-		evothings.ble.startScan(
+		evothings.eddystone.startScan(
 			function(beacon)
 			{
 				// Insert/update beacon table entry.
