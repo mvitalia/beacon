@@ -37,6 +37,9 @@ var app = (function()
 				beacon.timeStamp = Date.now();
 				beacons[beacon.address] = beacon;
 				alert(beacon.nid + "----"+beacon.nid[0]+"----"+beacon.id);
+				for(var i=0;i<beacon.length;i++){
+					alert(i + "---" + beacon[i])					
+				}
 				
 			},
 			function(error)
