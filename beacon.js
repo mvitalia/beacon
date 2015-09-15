@@ -10,7 +10,7 @@ var app = (function()
 	var updateTimer = null;
 
 	app.initialize = function()
-	{	alert("initialize");
+	{	
 		document.addEventListener(
 			'deviceready',
 			function() { evothings.scriptsLoaded(onDeviceReady) },
@@ -18,7 +18,7 @@ var app = (function()
 	};
 
 	function onDeviceReady()
-	{	alert("deviceReady");
+	{	
 		// Start tracking beacons!
 		setTimeout(startScan, 500);
 
@@ -28,7 +28,7 @@ var app = (function()
 
 	function startScan()
 	{
-		alert("startScan");
+		
 		// Called continuously when ranging beacons.
 		evothings.eddystone.startScan(
 			function(beacon)
