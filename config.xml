@@ -86,6 +86,9 @@
 	<feature name="UniversalAnalytics">
 	  <param name="ios-package" value="UniversalAnalyticsPlugin" />
 	</feature>
+	<feature name="BLE">
+	  <param name="ios-package" value="EVOBLE" />
+	</feature>
 	
 
     <!-- for Android (you will find one in res/xml) -->
@@ -94,6 +97,9 @@
     </feature>
 	<feature name="NetworkStatus">
 		<param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
+	</feature>
+	<feature name="BLE">
+		<param name="android-package" value="com.evothings.BLE" />
 	</feature>
 	
     <!-- for Windows Phone -->
@@ -109,6 +115,8 @@
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.BLUETOOTH"/>
+	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 	<access origin="*" />	
 	
 </widget>
