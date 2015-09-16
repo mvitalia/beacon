@@ -38,7 +38,7 @@ app.startScan = function(callbackFun)
 {
 	app.stopScan();
 
-	evothings.eddystone.startScan(
+	evothings.ble.startScan(
 		function(device)
 		{
 			alert(JSON.stringify(device));
@@ -60,7 +60,7 @@ app.startScan = function(callbackFun)
 // Stop scanning for devices.
 app.stopScan = function()
 {
-	evothings.eddystone.stopScan();
+	evothings.ble.stopScan();
 };
 
 // Called when Start Scan button is selected.
